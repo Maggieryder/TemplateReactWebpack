@@ -1,7 +1,7 @@
-import React {Component} from 'react'
+import React, {Component} from 'react'
 import {render} from 'react-dom'
-import Container from './components/container'
+import Container from './components/container.jsx'
 
-import './main.css';
+import './css/main.css';
 
 render(<Container />, document.getElementById('root'))
