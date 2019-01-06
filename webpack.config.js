@@ -1,45 +1,69 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+
+const CSSLoaders = [
+  {loader: 'style-loader'},
+  {
+    loader: 'css-loader',
+    options: {
+      sourceMap: true,
+      // minimize: !devMode
+      modules: true,
+      // importLoader: 2
+    }
+  },
+  {
+    loader:'postcss-loader',
+    options: {
+      sourceMap: true,
+      plugins: [autoprefixer()]
+    }
+  }
+];
 
 module.exports = {
-  devtool: "cheap-module-eval-source-map",
-  entry:"./src/index.jsx",
+  mode: 'development',
+  devtool: 'cheap-module-eval-source-map',
+  entry:'./src/index.jsx',
   output:{
-    path: path.resolve(__dirname,"/dist"),
+    path: path.resolve(__dirname,'dist'),
     filename: 'bundle.js',
-    publicPath: "dist/"
+    publicPath: '/'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js|jsx$/,
         exclude:/node_modules/,
-        loader: "babel"
+        use: 'babel-loader'
       },
       {
         test: /\.json$/,
-        loader: "json"
+        use: 'json-loader'
       },
       {
         test: /\.css$/,
-        loader: "style!css?modules!postcss"
+        use: CSSLoaders
       }
     ]
   },
   plugins: [
-    new webpack.BannerPlugin("Copyright Maggie Ryder 2017."),
+    new webpack.BannerPlugin('Copyright Maggie Ryder 2017.'),
     new HtmlWebpackPlugin({
-      template: __dirname + "/src/index.tmpl.html"
+      template: __dirname + '/src/index.tmpl.html',
+      filename: './index.html'
     })
   ],
-  postcss: [
-    require('autoprefixer')
-  ],
+  // postcss: [
+  //   require('autoprefixer')
+  // ],
   devServer: {
-    contentBase: "./dist",
-    colors: true,
-    historyApiFallback: true,
-    inline: true
+    contentBase: './dist',
+    // colors: true,
+    historyApiFallback: true//,
+    // inline: true
+    // hot: true
   }
 }
